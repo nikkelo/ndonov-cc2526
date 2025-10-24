@@ -26,7 +26,7 @@ PROGRAM verlet
     f_ap = f_a
     v_kp = v_k + tau/(2.0_wp*m)*(f_a+f_ap)
 
-    PRINT *, "The x, y and z positions of the particle at the", k, "-th iteration at tau =", tau*k, "are:"
+    PRINT *, "The x, y and z positions of the particle at the", k, "-th iteration at time =", tau*k, "are:"
     PRINT *, pos_k
 
     pos_k = pos_kp
