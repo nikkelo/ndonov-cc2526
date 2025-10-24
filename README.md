@@ -21,6 +21,6 @@ DO k = 1, n
     pos_k = pos_kp
     v_k = v_kp
 
-  ENDDO
+ENDDO
 ```
 This is the simplest version of the algorithm assuming that $f^{(a,x}}_k = f^{(a,x)}_{k+1}$.
