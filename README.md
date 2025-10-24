@@ -7,3 +7,20 @@ The course is taught by prof. Sergio Rampino, and there is a repository containi
 # verlet
 
 The files in the folder titled **verlet** contain Fortran files implementing the [Verlet algorithm](en.wikipedia.org/wiki/Verlet_integration), for the calculation of **particle trajectories/positions** in molecular dynamics symulations.
+
+The snippets below contain the code found in the loop that calculates the particle position at different iterations. 
+
+## verlet.f95
+```
+DO k = 1, n
+
+    pos_kp = pos_k + tau*v_k + tau**2_wp*(f_a)/(2_wp*m)
+    f_ap = f_a
+    v_kp = v_k + tau/(2_wp*m)*(f_a+f_ap)
+
+    pos_k = pos_kp
+    v_k = v_kp
+
+  ENDDO
+```
+This is the simplest version of the algorithm assuming that $f^{(a,x}}_k = f^{(a,x)}_{k+1}$.
