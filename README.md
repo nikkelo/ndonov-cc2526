@@ -24,3 +24,18 @@ DO k = 1, n
 ENDDO
 ```
 This is the simplest version of the algorithm assuming that $f^{(a,x)}\_k = f^{(a,x)}\_{k+1}$ . 
+
+## verlet_harmonic.f95
+```
+DO k = 1, n
+    f_a = -k_spring * (x_k - x_eq)
+    x_kp = x_k + tau*v_k + (tau**2)*(f_a)/(2.0_wp*m)
+    f_ap = -k_spring * (x_kp - x_eq)
+    v_kp = v_k + tau/(2.0_wp*m)*(f_a+f_ap)
+
+    x_k = x_kp
+    v_k = v_kp
+
+ENDDO
+```
+Algorithm applied to one dimensional movement modelled as a harmonic oscillator. 
