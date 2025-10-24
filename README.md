@@ -23,4 +23,4 @@ DO k = 1, n
 
 ENDDO
 ```
-This is the simplest version of the algorithm assuming that $f^{(a,x)}_k = f^{(a,x)}_{k+1}$. 
+This is the simplest version of the algorithm assuming that $f^{(a,x)}_k = f^{(a,x)}_{k+1}$ . 
