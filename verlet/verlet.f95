@@ -22,10 +22,9 @@ PROGRAM verlet
   n = 10 ! 10 iterations of steps k
 
   DO k = 1, n
-
-    pos_kp = pos_k + tau*v_k + tau**2_wp*(f_a)/(2_wp*m)
+    pos_kp = pos_k + tau*v_k + (tau**2)*(f_a)/(2.0_wp*m)
     f_ap = f_a
-    v_kp = v_k + tau/(2_wp*m)*(f_a+f_ap)
+    v_kp = v_k + tau/(2.0_wp*m)*(f_a+f_ap)
 
     PRINT *, "The x, y and z positions of the particle at the", k, "-th iteration at tau =", tau*k, "are:"
     PRINT *, pos_k
