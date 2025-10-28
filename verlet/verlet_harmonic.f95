@@ -32,4 +32,4 @@ PROGRAM verlet_harmonic
 
   ENDDO
 
-END PROGRAM verlet
+END PROGRAM verlet_harmonic
