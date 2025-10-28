@@ -1,4 +1,4 @@
-PROGRAM verlet
+PROGRAM verlet_harmonic
   IMPLICIT NONE
   
   INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND (p=13, r=300)
