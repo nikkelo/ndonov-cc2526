@@ -18,6 +18,7 @@ PROGRAM verlet
 
   tau = 0.002_wp ! /s
   f_a = [0.0_wp, 0.1_wp, 0.0_wp] ! /kg m s^-2 ; constant force with x, y and z components
+  v_k = [0.0_wp, 0.0_wp, 0.0_wp] ! /m s^-1 ; speed of particle
   m = 1_wp ! /kg ; mass of particle
   pos_k = [0.0_wp, 0.0_wp, 0.0_wp]
   n = 100000 ! 100 iterations of steps k
