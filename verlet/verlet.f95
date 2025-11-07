@@ -1,13 +1,13 @@
 PROGRAM verlet
+  USE generic_energies
   IMPLICIT NONE
   
-  INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND (p=13, r=300)
   REAL (KIND = wp) :: tau, target_time, pos_diff
   REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: f_a, f_ap
   REAL (KIND = wp) :: m
   REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: pos_k, pos_kp, pos_temp
   REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: v_k, v_kp
-  REAL (KIND = wp) :: E_k, E_p, E, kinetic_energy
+  REAL (KIND = wp) :: E_k, E_p, E
   INTEGER :: k, n
   LOGICAL :: convergence
 
@@ -44,7 +44,7 @@ PROGRAM verlet
       PRINT *
 
       ! Compute the kinetic, potential and total energy
-      E_k = kinetic_energy(m, v_kp(1), v_kp(2), v_kp(3))
+      CALL kinetic_energy(m, pos_k(1), pos_k(2), pos_k(3), E_k)
       E_p = -DOT_PRODUCT(f_ap, pos_kp) ! potential energy calculation
       E = E_k + E_p
 
@@ -76,9 +76,3 @@ PROGRAM verlet
  
   DEALLOCATE(f_a, f_ap, pos_k, pos_kp, v_k, v_kp, pos_temp)
 END PROGRAM verlet
-
-FUNCTION kinetic_energy(m, x, y, z)
-  INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND (p=13, r=300)
-  REAL (KIND=wp) :: kinetic_energy, m, x, y, z
-  kinetic_energy = 0.5_wp*m*(x**2 + y**2 + z**2) ! kinetic energy calculation
-END FUNCTION kinetic_energy
