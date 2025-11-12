@@ -1,6 +1,6 @@
 MODULE generic_energies
+   USE kinds, ONLY: wp => dp 
    IMPLICIT NONE
-   INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND (p=13, r=300)
 
    PUBLIC :: kinetic_energy, potential_energy, total_energy
 

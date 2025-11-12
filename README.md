@@ -9,9 +9,18 @@ The course is taught by prof. Sergio Rampino, and there is a repository containi
 The files in the folder titled **verlet** contain Fortran files implementing the [Verlet algorithm](https://en.wikipedia.org/wiki/Verlet_integration), for the calculation of **particle trajectories/positions** in molecular dynamics symulations.
 
 There are multiple files in the folder each with its own variation of the implementation, or an additional subroutine to be used in the calculations for the individual variations. 
+
+## Simplest Implementations
 - **verlet.f95**, which is the main file contains the simplest implementation with the force remaining constant throughout the simulation. 
 - **verlet_harmonic.f95**, which models the moving particle as a harmonic oscillator
-- **potential_energy.f95**
-- **kinetic_energy.f95**
 
-# other 
+Some additional lines were added to do exercises about checking the convergence at given points, calculating the energies at every point, doing some of the calculations from modules rather than in the main code, etc. 
+
+## Lennard-Jones Potentials
+- **verlet_LJ.f95**, which models atoms in 3D space interacting through pairwise additive Lennard-Jones potentials. The parameters are read from an .xyz file. 
+
+## Supplementary Files
+- **kinds.f95**, a module containing the two working precisions used (double precision and single precision).
+- **generic_energies.f95**, another module containing the energy calculations for the verlet.f95 implementation
+- **neon.xyz**, contains the information about the interacting Neon atoms for the LJ implementation. Sourced from [this paper](doi.org/10.1063/1.4796144)
+

@@ -1,5 +1,6 @@
 PROGRAM verlet
   USE generic_energies
+  USE kinds
   IMPLICIT NONE
   
   REAL (KIND = wp) :: tau, target_time, pos_diff

@@ -1,7 +1,7 @@
 PROGRAM verlet_LJ
+  USE kinds, ONLY: wp => dp
   IMPLICIT NONE
   
-  INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND (p=13, r=300)
   REAL (KIND = wp) :: tau
   REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: f_a, f_ap
   REAL (KIND = wp) :: m
