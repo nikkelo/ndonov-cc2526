@@ -18,12 +18,12 @@ There are multiple files in the folder each with its own variation of the implem
 Some additional lines were added to do exercises about checking the convergence at given points, calculating the energies at every point, doing some of the calculations from modules rather than in the main code, etc. 
 
 ## Lennard-Jones Potentials
-- **verlet_LJ.f95**, which models atoms in 3D space interacting through pairwise additive Lennard-Jones potentials. The parameters are read from an .xyz file. 
+- **verlet_LJ.f95**, which models atoms in 3D space interacting through pairwise additive Lennard-Jones potentials. The results are written into the "neon.xyz" file in XYZ format and can from there be used in VMD to visualize.  
 
 ## Supplementary Files
 - **kinds.f95**, a module containing the two working precisions used (double precision and single precision).
 - **generic_energies.f95**, another module containing the energy calculations for the verlet.f95 implementation
-- **neon.xyz**, contains the information about the interacting Neon atoms for the LJ implementation. Sourced from [this paper](doi.org/10.1063/1.4796144)
+- **neon.xyz**, contains the output from the interacting Neon atoms for the LJ implementation. Parameters sigma and epsilon sourced from [this paper](doi.org/10.1063/1.4796144)
 
 # other 
 
