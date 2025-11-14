@@ -13,6 +13,7 @@ There are multiple files in the folder each with its own variation of the implem
 ## Simplest Implementations
 - **verlet.f95**, which is the main file contains the simplest implementation with the force remaining constant throughout the simulation. 
 - **verlet_harmonic.f95**, which models the moving particle as a harmonic oscillator
+<<<<<<< HEAD
 
 Some additional lines were added to do exercises about checking the convergence at given points, calculating the energies at every point, doing some of the calculations from modules rather than in the main code, etc. 
 
@@ -23,4 +24,6 @@ Some additional lines were added to do exercises about checking the convergence 
 - **kinds.f95**, a module containing the two working precisions used (double precision and single precision).
 - **generic_energies.f95**, another module containing the energy calculations for the verlet.f95 implementation
 - **neon.xyz**, contains the information about the interacting Neon atoms for the LJ implementation. Sourced from [this paper](doi.org/10.1063/1.4796144)
+
+# other 
 

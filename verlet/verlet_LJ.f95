@@ -2,38 +2,74 @@ PROGRAM verlet_LJ
   USE kinds, ONLY: wp => dp
   IMPLICIT NONE
   
-  REAL (KIND = wp) :: tau
-  REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: f_a, f_ap
-  REAL (KIND = wp) :: m
-  REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: pos_k, pos_kp
-  REAL (KIND = wp), DIMENSION(:), ALLOCATABLE :: v_k, v_kp
-  REAL (KIND = wp) :: epsilon, sigma ! new parameters from LJ equation
-  REAL (KIND = wp) :: r ! distance between 2 atoms
-  INTEGER :: k, n
+  ! define parameters
+  REAL (KIND = wp) :: tau  ! timestep, loop count and total number of steps
+  INTEGER :: k, n ! loop parameters
+  REAL (KIND = wp) :: r ! distance
+  REAL (KIND = wp) :: sigma, epsilon, m ! parameters for solving the equation, read from the XYZ file 
+  REAL (KIND = wp), DIMENSION(2,3) :: pos, pos_nxt, v, v_nxt, f, f_nxt ! position at current iteration, velocity at current iteration, force at current iteration, force at next iteration
 
-  ALLOCATE(f_a(3))
-  ALLOCATE(pos_k(3))
-  ALLOCATE(pos_kp(3))
-  ALLOCATE(v_k(3))
-  ALLOCATE(v_kp(3))
+  ! loop parameters
+  tau = 1.0_wp
+  k = 1
+  n = 6000 
 
-  tau = 0.2_wp ! /s
-  f_a = [0.0, 0.1, 0.0] ! /kg m s^-2 ; constant force with x, y and z components
-  m = 1_wp ! /kg ; mass of particle
-  pos_k = [0.0, 0.0, 0.0]
-  n = 10 ! 10 iterations of steps k
+  ! given parameters by .xyz file
+  sigma = 5.2186_wp
+  epsilon = 0.000112991_wp
+
+  ! assign mass, starting positions, velocities and forces by .xyz file. index(i, j) correpsonds to the i-th atom and its x/y/z component, respectively
+  m = 20.1797_wp
+
+  pos(1,:) = (/ 0.0_wp, 0.0_wp, 8.0_wp /) ! positions of the first Ne atom
+  pos(2,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! positions of the second Ne atom
+
+  v(1,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! velocities of the first Ne atom
+  v(2,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! velocities of the first Ne atom
+
+  f(1,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! forces of the first Ne atom
+  f(2,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! forces of the second Ne atom
+
+  ! open neon.xyz for outputs
+  OPEN (UNIT=12, FILE="neon.xyz", STATUS="replace", ACTION="write")
 
   DO k = 1, n
-    pos_kp = pos_k + tau*v_k + (tau**2)*(f_a)/(2.0_wp*m)
-    f_ap = f_a
-    v_kp = v_k + tau/(2.0_wp*m)*(f_a+f_ap)
 
-    PRINT *, "The x, y and z positions of the particle at the", k, "-th iteration at time =", tau*k, "are:"
-    PRINT *, pos_k
+    ! calculate force at current positions
+    r = SQRT(SUM((pos(1,:) - pos(2,:))**2.0_wp))
+    f(1,:) = - ((((pos(1,:) - pos(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
+    f(2,:) = - ((((pos(2,:) - pos(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
 
-    pos_k = pos_kp
-    v_k = v_kp
+    ! update the positions of both atoms
+    pos_nxt(1,:) = pos(1,:) + tau*v(1,:) + (tau**2)*f(1,:)/(2.0_wp*m)
+    pos_nxt(2,:) = pos(2,:) + tau*v(2,:) + (tau**2)*f(2,:)/(2.0_wp*m)
+
+    ! calculate force at new positions
+    r = SQRT(SUM((pos(1,:) - pos(2,:))**2))
+    f_nxt(1,:) = -((((pos_nxt(1,:) - pos_nxt(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
+    f_nxt(2,:) = -((((pos_nxt(2,:) - pos_nxt(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
+
+    ! update the velocities of both atoms
+    v_nxt(1,:) = v(1,:) + tau/(2.0_wp*m)*(f(1,:) + f_nxt(1,:))
+    v_nxt(2,:) = v(2,:) + tau/(2.0_wp*m)*(f(2,:) + f_nxt(2,:))
+
+    ! print the current positions of the file 
+    PRINT *, "PARTICLE POSITIONS AT ITERATION", k, "AND TIMESTEP", tau*k, ":"
+      PRINT *, pos_nxt
+
+    ! write to .xyz file output
+
+    WRITE (UNIT=12, FMT=*) "2"
+    WRITE (UNIT=12, FMT=*) "TIMESTEP: ", tau 
+    WRITE (UNIT=12, FMT=*) "Ne", pos_nxt(1,:)
+    WRITE (UNIT=12, FMT=*) "Ne", pos_nxt(2,:)
+
+    ! update for next iteration
+    pos = pos_nxt
+    v = v_nxt
 
   ENDDO
 
+  CLOSE (12)
+      
 END PROGRAM verlet_LJ
