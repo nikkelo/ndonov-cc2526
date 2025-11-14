@@ -3,11 +3,11 @@ PROGRAM verlet_LJ
   IMPLICIT NONE
   
   ! define parameters
-  REAL (KIND = wp) :: tau  ! timestep, loop count and total number of steps
+  REAL (KIND = wp) :: tau  ! /s, timestep
   INTEGER :: k, n ! loop parameters
-  REAL (KIND = wp) :: r ! distance
-  REAL (KIND = wp) :: sigma, epsilon, m ! parameters for solving the equation, read from the XYZ file 
-  REAL (KIND = wp), DIMENSION(2,3) :: pos, pos_nxt, v, v_nxt, f, f_nxt ! position at current iteration, velocity at current iteration, force at current iteration, force at next iteration
+  REAL (KIND = wp) :: r ! A, interatomic distance
+  REAL (KIND = wp) :: sigma, epsilon, m ! /A, /eV, /amu, LJ parameters and mass
+  REAL (KIND = wp), DIMENSION(2,3) :: pos, pos_nxt, v, v_nxt, f, f_nxt ! /A, /A s^-1, /eV A^-1, position, velocity and force arrays
 
   ! loop parameters
   tau = 1.0_wp

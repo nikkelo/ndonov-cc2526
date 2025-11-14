@@ -15,11 +15,11 @@ MODULE generic_energies
 
    END SUBROUTINE kinetic_energy
 
-   SUBROUTINE potential_energy(f, pos, E_p)
+   SUBROUTINE potential_energy(f, pos, pos_nxt, E_p)
 
-      REAL(KIND=wp), DIMENSION(3), INTENT(IN) :: f, pos ! Inputs for potential energy formula
+      REAL(KIND=wp), DIMENSION(3), INTENT(IN) :: f, pos, pos_nxt ! Inputs for potential energy formula
       REAL(KIND=wp), INTENT(OUT) :: E_p ! Potential energy output
-      E_p = -DOT_PRODUCT(f, pos)
+      E_p = -DOT_PRODUCT(f, pos - pos_nxt)
 
    END SUBROUTINE potential_energy
 
