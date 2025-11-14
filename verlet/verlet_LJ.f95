@@ -14,11 +14,11 @@ PROGRAM verlet_LJ
   k = 1
   n = 6000 
 
-  ! given parameters by .xyz file
+  ! sigma and epsilon parameters of the calculation
   sigma = 5.2186_wp
   epsilon = 0.000112991_wp
 
-  ! assign mass, starting positions, velocities and forces by .xyz file. index(i, j) correpsonds to the i-th atom and its x/y/z component, respectively
+  ! initial conditions concerning mass of both particles, positions, velocities, forces
   m = 20.1797_wp
 
   pos(1,:) = (/ 0.0_wp, 0.0_wp, 8.0_wp /) ! positions of the first Ne atom
@@ -30,24 +30,30 @@ PROGRAM verlet_LJ
   f(1,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! forces of the first Ne atom
   f(2,:) = (/ 0.0_wp, 0.0_wp, 0.0_wp /) ! forces of the second Ne atom
 
-  ! open neon.xyz for outputs
+  ! open neon.xyz for outputs and write the initial positions of the atoms
   OPEN (UNIT=12, FILE="neon.xyz", STATUS="replace", ACTION="write")
+  WRITE (UNIT=12, FMT=*) "2"
+  WRITE (UNIT=12, FMT=*) "TIMESTEP: ", 0.0_wp 
+  WRITE (UNIT=12, FMT=*) "Ne", pos(1,:)
+  WRITE (UNIT=12, FMT=*) "Ne", pos(2,:)
 
+
+  ! main loop for calculating the further iterations
   DO k = 1, n
 
     ! calculate force at current positions
     r = SQRT(SUM((pos(1,:) - pos(2,:))**2.0_wp))
-    f(1,:) = - ((((pos(1,:) - pos(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
-    f(2,:) = - ((((pos(2,:) - pos(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
+    f(1,:) = - ((((pos(1,:) - pos(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**13) + 6.0_wp * (sigma**6)/(r**7))))
+    f(2,:) = - ((((pos(2,:) - pos(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**13) + 6.0_wp * (sigma**6)/(r**7))))
 
     ! update the positions of both atoms
     pos_nxt(1,:) = pos(1,:) + tau*v(1,:) + (tau**2)*f(1,:)/(2.0_wp*m)
     pos_nxt(2,:) = pos(2,:) + tau*v(2,:) + (tau**2)*f(2,:)/(2.0_wp*m)
 
     ! calculate force at new positions
-    r = SQRT(SUM((pos(1,:) - pos(2,:))**2))
-    f_nxt(1,:) = -((((pos_nxt(1,:) - pos_nxt(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
-    f_nxt(2,:) = -((((pos_nxt(2,:) - pos_nxt(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**12) + 6.0_wp * (sigma**6)/(r**7))))
+    r = SQRT(SUM((pos_nxt(1,:) - pos_nxt(2,:))**2))
+    f_nxt(1,:) = -((((pos_nxt(1,:) - pos_nxt(2,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**13) + 6.0_wp * (sigma**6)/(r**7))))
+    f_nxt(2,:) = -((((pos_nxt(2,:) - pos_nxt(1,:))/r)* 4.0_wp * epsilon * (-12.0_wp * (sigma**12)/(r**13) + 6.0_wp * (sigma**6)/(r**7))))
 
     ! update the velocities of both atoms
     v_nxt(1,:) = v(1,:) + tau/(2.0_wp*m)*(f(1,:) + f_nxt(1,:))
@@ -58,7 +64,6 @@ PROGRAM verlet_LJ
       PRINT *, pos_nxt
 
     ! write to .xyz file output
-
     WRITE (UNIT=12, FMT=*) "2"
     WRITE (UNIT=12, FMT=*) "TIMESTEP: ", tau 
     WRITE (UNIT=12, FMT=*) "Ne", pos_nxt(1,:)
