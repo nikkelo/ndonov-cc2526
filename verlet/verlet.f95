@@ -29,7 +29,6 @@ PROGRAM verlet
   f = [0.0_wp, 0.1_wp, 0.0_wp]
   pos = [0.0_wp, 0.0_wp, 0.0_wp]
   v = [0.0_wp, 0.0_wp, 0.0_wp]
-  E_p = -DOT_PRODUCT(f, pos)
 
   ! main loop for calculating further iterations
   DO k = 1, n

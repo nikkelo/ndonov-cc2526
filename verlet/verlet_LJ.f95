@@ -1,4 +1,5 @@
 PROGRAM verlet_LJ
+  USE generic_energies
   USE kinds, ONLY: wp => dp
   IMPLICIT NONE
   
@@ -8,6 +9,7 @@ PROGRAM verlet_LJ
   REAL (KIND = wp) :: r ! A, interatomic distance
   REAL (KIND = wp) :: sigma, epsilon, m ! /A, /eV, /amu, LJ parameters and mass
   REAL (KIND = wp), DIMENSION(2,3) :: pos, pos_nxt, v, v_nxt, f, f_nxt ! /A, /A s^-1, /eV A^-1, position, velocity and force arrays
+  REAL (KIND = wp) :: E_k1, E_k2, E_k, E_p, E ! /J, kinetic, potential, and total energy
 
   ! loop parameters
   tau = 1.0_wp
@@ -63,9 +65,22 @@ PROGRAM verlet_LJ
     PRINT *, "PARTICLE POSITIONS AT ITERATION", k, "AND TIMESTEP", tau*k, ":"
       PRINT *, pos_nxt
 
+    ! at every 100-th iteration, check the conservation of energy by calculating and printing the system's total energy
+    CALL kinetic_energy(m, v(1,1), v(1,2), v(1,3), E_k1)
+    CALL kinetic_energy(m, v(2,1), v(2,2), v(2,3), E_k2)
+    E_k = E_k1 + E_k2
+
+    E_p = 4.0_wp * epsilon * ( (sigma/r)**12 - (sigma/r)**6 )
+
+    CALL total_energy(E_k, E_p, E)
+
+    IF (MOD(k, 100) .EQ. 0) THEN
+      WRITE (*, '(I7, 3F13.8)') k, E_k, E_p, E
+    END IF 
+
     ! write to .xyz file output
     WRITE (UNIT=12, FMT=*) "2"
-    WRITE (UNIT=12, FMT=*) "TIMESTEP: ", tau 
+    WRITE (UNIT=12, FMT=*) "TIMESTEP: ", tau*k 
     WRITE (UNIT=12, FMT=*) "Ne", pos_nxt(1,:)
     WRITE (UNIT=12, FMT=*) "Ne", pos_nxt(2,:)
 
