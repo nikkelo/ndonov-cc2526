@@ -4,7 +4,7 @@ PROGRAM cda
   IMPLICIT NONE
 
   TYPE (cube) :: rho_a, rho_b, rho_ab, rho_ref, drho
-  REAL (KIND=wp) :: cdz
+  REAL (KIND=wp), DIMENSION(:), ALLOCATABLE :: cdz
 
   ! using the cube_get subroutine, pull the data from the cube files
   CALL cube_get(rho_a, "../test/CuCO+/a.cube")
@@ -12,7 +12,12 @@ PROGRAM cda
   CALL cube_get(rho_ab, "../test/CuCO+/ab.cube")
 
   ! calculate charge displacement according to formulas
+  rho_ref = rho_a + rho_b 
+  drho = rho_ab - rho_ref
+
+  CALL cube_cdz(drho, cdz) 
   
-
-
+  PRINT *, cdz
+  ! delete the cubes from memory in case you want to start over
+  
 END PROGRAM cda
