@@ -25,5 +25,9 @@ Some additional lines were added to do exercises about checking the convergence 
 - **generic_energies.f95**, another module containing the energy calculations for the verlet.f95 implementation
 - **neon.xyz**, contains the output from the interacting Neon atoms for the LJ implementation. Parameters sigma and epsilon sourced from [this paper](doi.org/10.1063/1.4796144)
 
-# other 
+# cda
+
+The files in the folder titled **cda** contain Fortran files for implementing a Charge-Displacement Analysis on a set of test .CUBE files referring to CuCO+. 
+
+The main file located at **src/cda.f95** contains a compact implementation, utilizing the subroutines found in the **src/cubes.f95** module. 
 
