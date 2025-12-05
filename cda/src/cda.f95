@@ -18,6 +18,10 @@ PROGRAM cda
   CALL cube_cdz(drho, cdz) 
   
   PRINT *, cdz
+
   ! delete the cubes from memory in case you want to start over
-  
+  CALL cube_del(rho_a)
+  CALL cube_del(rho_b)
+  CALL cube_del(rho_ab)
+
 END PROGRAM cda

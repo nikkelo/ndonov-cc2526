@@ -16,6 +16,7 @@ MODULE cubes
   PUBLIC :: cube_get, &
             cube_add, &
             cube_sub, &
+            cube_unwrap, &
             cube_int, &
             cube_cdz, &
             cube_del
@@ -128,14 +129,15 @@ MODULE cubes
     cube_sub%array = mycube1%array - mycube2%array
   END FUNCTION cube_sub
 
-  ! integration function
-  FUNCTION cube_int (mycube)
+  ! "unwrap" the cube from the single onedimensional array for all corodinates into a 3D array
+  SUBROUTINE cube_unwrap (mycube, array3d)
+
     REAL (KIND=wp) :: cube_int
     TYPE (cube), INTENT(IN) :: mycube
     INTEGER :: i, i_x, i_y, i_z
     REAL (KIND = wp), DIMENSION(:,:,:), ALLOCATABLE :: array3d
-
     ALLOCATE(array3d(mycube%n_x, mycube%n_y, mycube%n_z))
+
     i = 1
 
     DO i_x=1, mycube%n_x
@@ -148,9 +150,28 @@ MODULE cubes
       ENDDO
     ENDDO
 
-    cube_int = SUM(array3d(:, :, :)) * mycube%dx * mycube%dy * mycube%dz
+  END SUBROUTINE cube_unwrap 
 
-    DEALLOCATE(array3d)
+  ! repeatedly integrate over x and y
+  FUNCTION cube_int (mycube)
+    REAL (KIND=wp), DIMENSION(:), ALLOCATABLE :: cube_int
+    TYPE (cube), INTENT(IN) :: mycube
+    INTEGER :: i_x, i_y, i_z
+    REAL (KIND = wp), DIMENSION(:,:,:), ALLOCATABLE :: array3d
+
+    ALLOCATE(cube_int(mycube%n_z))
+
+    CALL cube_unwrap(mycube, array3d)
+
+    DO i_z = 1, mycube%n_z
+      cube_int(i_z) = 0.0_wp
+        DO i_x = 1, mycube%n_x
+          DO i_y = 1, mycube%n_y
+            cube_int(i_z) = cube_int(i_z) + (array3d(i_x, i_y, i_z) * mycube%dx * mycube%dy)
+          ENDDO
+        ENDDO
+    ENDDO
+    
   END FUNCTION cube_int
 
   ! "destroy" the cube and deallocate the memory
@@ -165,17 +186,21 @@ MODULE cubes
     IF (ASSOCIATED(mycube%array)) DEALLOCATE(mycube%array)
   END SUBROUTINE cube_del
 
-  ! cdz
+  ! give the final charge displacement in z
   SUBROUTINE cube_cdz (mycube, cdz)
     TYPE (cube), INTENT(IN) :: mycube
-    REAL (KIND=wp), DIMENSION(:), ALLOCATABLE :: cdz
-    INTEGER :: i
+    REAL (KIND=wp), DIMENSION(:), ALLOCATABLE :: integral, cdz
+    INTEGER :: i, j
 
+    integral = cube_int(mycube)
     ALLOCATE(cdz(mycube%n_z))
 
-    DO i=1, mycube%n_z 
-      cdz(i) = cube_int(mycube) * mycube%dz 
+    DO i = 1, mycube%n_z
+        DO j = 1, i
+                cdz(i) = cdz(i) + (integral(j) * mycube%dz) 
+        ENDDO
     ENDDO
+
   END SUBROUTINE cube_cdz
 
 END MODULE cubes
