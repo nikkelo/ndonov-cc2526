@@ -13,7 +13,6 @@ There are multiple files in the folder each with its own variation of the implem
 ## Simplest Implementations
 - **verlet.f95**, which is the main file contains the simplest implementation with the force remaining constant throughout the simulation. 
 - **verlet_harmonic.f95**, which models the moving particle as a harmonic oscillator
-<<<<<<< HEAD
 
 Some additional lines were added to do exercises about checking the convergence at given points, calculating the energies at every point, doing some of the calculations from modules rather than in the main code, etc. 
 
