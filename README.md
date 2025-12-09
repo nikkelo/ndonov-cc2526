@@ -29,5 +29,18 @@ Some additional lines were added to do exercises about checking the convergence 
 
 The files in the folder titled **cda** contain Fortran files for implementing a Charge-Displacement Analysis on a set of test .CUBE files referring to CuCO+. 
 
-The main file located at **src/cda.f95** contains a compact implementation, utilizing the subroutines found in the **src/cubes.f95** module. 
+The main file located at **src/cda.f95** contains a compact implementation, utilizing the subroutines found in the **src/cubes.f95** module.
+
+The following subroutes can be found in **src/cubes.f95** which are later used to compute the charge displacement in the main file:
+- cube_get: read a .cube file
+- cube_add: operation of addition for cubes
+- cube_sub: operation of subtraction for cubes
+- cube_unwrap: "unwrap" a cube into a 3D array from the 1D charge array found at the end of the file
+- cube_int: integrate over xy
+- cube_cdz: compute the charge displacement along z
+- cube_del: unallocate a cube from memory
+
+# py
+
+The files in the folder titled **py** are jupyter notebooks related to various procedures for the use of machine learning in chemistry (scikit-learn).
 
