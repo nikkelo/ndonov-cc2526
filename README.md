@@ -13,7 +13,6 @@ There are multiple files in the folder each with its own variation of the implem
 ## Simplest Implementations
 - **verlet.f95**, which is the main file contains the simplest implementation with the force remaining constant throughout the simulation. 
 - **verlet_harmonic.f95**, which models the moving particle as a harmonic oscillator
-<<<<<<< HEAD
 
 Some additional lines were added to do exercises about checking the convergence at given points, calculating the energies at every point, doing some of the calculations from modules rather than in the main code, etc. 
 
@@ -29,5 +28,18 @@ Some additional lines were added to do exercises about checking the convergence 
 
 The files in the folder titled **cda** contain Fortran files for implementing a Charge-Displacement Analysis on a set of test .CUBE files referring to CuCO+. 
 
-The main file located at **src/cda.f95** contains a compact implementation, utilizing the subroutines found in the **src/cubes.f95** module. 
+The main file located at **src/cda.f95** contains a compact implementation, utilizing the subroutines found in the **src/cubes.f95** module.
+
+The following subroutes can be found in **src/cubes.f95** which are later used to compute the charge displacement in the main file:
+- cube_get: read a .cube file
+- cube_add: operation of addition for cubes
+- cube_sub: operation of subtraction for cubes
+- cube_unwrap: "unwrap" a cube into a 3D array from the 1D charge array found at the end of the file
+- cube_int: integrate over xy
+- cube_cdz: compute the charge displacement along z
+- cube_del: unallocate a cube from memory
+
+# py
+
+The files in the folder titled **py** are jupyter notebooks related to various procedures for the use of machine learning in chemistry (scikit-learn).
 
